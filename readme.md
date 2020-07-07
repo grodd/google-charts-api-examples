@@ -1,5 +1,9 @@
 # Google charts API examples
 
+### Interface
+
+![Image of the UI](interface.png "Interface")
+
 ### Requirements
   * npm v6.14.4
   * node v12.18.0
