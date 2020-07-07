@@ -1,0 +1,118 @@
+<html>
+  <head>
+    <title>
+      google charts example
+    </title>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+  </head>
+
+  <body>
+    <label>Select bin width : </label>
+    <button onclick="drawBasicPosts(300)">300</button>
+    <button onclick="drawBasicPosts(400)">400</button>
+    <button onclick="drawBasicPosts(500)">500</button>
+    <button onclick="drawBasicPosts(600)">600</button>
+    <button onclick="drawBasicPosts(700)">700</button>
+    <button onclick="drawBasicPosts(800)">800</button>
+    <div id="chart_div_posts"></div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <label>Select bin width : </label>
+    <button onclick="drawBasicPages(300)">300</button>
+    <button onclick="drawBasicPages(400)">400</button>
+    <button onclick="drawBasicPages(500)">500</button>
+    <button onclick="drawBasicPages(600)">600</button>
+    <button onclick="drawBasicPages(700)">700</button>
+    <button onclick="drawBasicPages(800)">800</button>
+    <div id="chart_div_pages"></div>
+  </body>
+
+  <!-- The below script is to display and modify the contents of the posts plot -->
+  <script>
+    google.charts.load("current", { packages: ["corechart", "bar"] });
+    google.charts.setOnLoadCallback(drawBasicPosts);
+    function drawBasicPosts(number) {
+      number = typeof number !== "undefined" ? number : 500;
+      let countArray = [];
+      let temp = JSON.parse("[" + "<%=posts %>" + "]");
+      let index = 0;
+      while (index < temp.length) {
+        let num = temp
+          .slice(index, index + number)
+          .reduce((total, current) => total + current);
+        countArray.push([`${index} - ${index + number}`, num]);
+        index = index + number;
+        if (index > temp.length) {
+          index = temp.length;
+        }
+      }
+      var data = new google.visualization.DataTable();
+      data.addColumn("string", "Number of words");
+      data.addColumn("number", "Count");
+      data.addRows(countArray);
+
+      var options = {
+        title: "posts word count",
+        animation: {"startup": true},
+        hAxis: {
+          title: "Number of words",
+        },
+        vAxis: {
+          title: "Number of posts",
+        },
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById("chart_div_posts")
+      );
+      chart.draw(data, options);
+    }
+  </script>
+
+
+<!-- The below script is to display and modify the contents of the pages plot -->
+  <script> 
+    google.charts.setOnLoadCallback(drawBasicPages);
+    function drawBasicPages(number) {
+      number = typeof number !== "undefined" ? number : 500;
+      let countArray = [];
+      let temp = JSON.parse("[" + "<%=pages %>" + "]");
+      let index = 0;
+      while (index < temp.length) {
+        let num = temp
+          .slice(index, index + number)
+          .reduce((total, current) => total + current);
+        countArray.push([`${index} - ${index + number}`, num]);
+        index = index + number;
+        if (index > temp.length) {
+          index = temp.length;
+        }
+      }
+      var data = new google.visualization.DataTable();
+      data.addColumn("string", "Number of words");
+      data.addColumn("number", "Count");
+      data.addRows(countArray);
+
+      var options = {
+        title: "pages word count",
+        animation: {"startup": true},
+        hAxis: {
+          title: "Number of words",
+        },
+        vAxis: {
+          title: "Number of pages",
+        },
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById("chart_div_pages")
+      );
+      chart.draw(data, options);
+    }
+  </script>
+</html>
